@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>demiweb | Hosting y desarrollo web</title>
+	<link rel="icon" type="image/svg+xml" href="favicon.svg">
+	<meta
+		name="description"
+		content="Hosting, sitios web en HTML y WordPress, mantenimiento y soluciones digitales modernas para marcas y negocios que quieren vender mejor."
+	>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #07111f;
+			--bg-soft: #0d1b2f;
+			--surface: rgba(10, 22, 39, 0.72);
+			--surface-strong: #10223b;
+			--card-border: rgba(130, 221, 255, 0.16);
+			--text: #f5fbff;
+			--muted: #9fb2c8;
+			--primary: #52e0ff;
+			--secondary: #ff8a3d;
+			--accent: #c7ff64;
+			--shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+			--radius-xl: 28px;
+			--radius-lg: 22px;
+			--radius-md: 16px;
+			--max-width: 1180px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Manrope", sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at top left, rgba(82, 224, 255, 0.16), transparent 28%),
+				radial-gradient(circle at 85% 15%, rgba(255, 138, 61, 0.18), transparent 18%),
+				linear-gradient(180deg, #07111f 0%, #091526 48%, #060d19 100%);
+			min-height: 100vh;
+			overflow-x: hidden;
+		}
+
+		body::before,
+		body::after {
+			content: "";
+			position: fixed;
+			inset: auto;
+			border-radius: 999px;
+			filter: blur(90px);
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		body::before {
+			width: 280px;
+			height: 280px;
+			background: rgba(82, 224, 255, 0.12);
+			top: 8%;
+			left: -80px;
+		}
+
+		body::after {
+			width: 360px;
+			height: 360px;
+			background: rgba(255, 138, 61, 0.12);
+			right: -120px;
+			top: 26%;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		img {
+			max-width: 100%;
+			display: block;
+		}
+
+		.page-shell {
+			position: relative;
+			z-index: 1;
+		}
+
+		.topbar {
+			position: sticky;
+			top: 0;
+			z-index: 10;
+			backdrop-filter: blur(18px);
+			background: rgba(7, 17, 31, 0.68);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+		}
+
+		.topbar-inner,
+		.section,
+		.hero {
+			width: min(calc(100% - 32px), var(--max-width));
+			margin: 0 auto;
+		}
+
+		.topbar-inner {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 24px;
+			padding: 18px 0;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			font-family: "Space Grotesk", sans-serif;
+			font-weight: 700;
+			letter-spacing: 0.03em;
+		}
+
+		.brand-mark {
+			width: 42px;
+			height: 42px;
+			border-radius: 14px;
+			display: grid;
+			place-items: center;
+			background: linear-gradient(135deg, var(--secondary), var(--primary));
+			color: #04111d;
+			box-shadow: 0 14px 32px rgba(82, 224, 255, 0.18);
+		}
+
+		.nav {
+			display: flex;
+			align-items: center;
+			gap: 22px;
+			color: var(--muted);
+			font-size: 0.95rem;
+		}
+
+		.nav a {
+			transition: color 0.25s ease;
+		}
+
+		.nav a:hover {
+			color: var(--text);
+		}
+
+		.button,
+		.button-secondary {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			border-radius: 999px;
+			padding: 14px 22px;
+			font-weight: 700;
+			transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+		}
+
+		.button {
+			background: linear-gradient(135deg, var(--primary), #7fffe0);
+			color: #06111f;
+			box-shadow: 0 18px 36px rgba(82, 224, 255, 0.28);
+		}
+
+		.button-secondary {
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			background: rgba(255, 255, 255, 0.03);
+			color: var(--text);
+		}
+
+		.button:hover,
+		.button-secondary:hover {
+			transform: translateY(-2px);
+		}
+
+		.hero {
+			display: grid;
+			grid-template-columns: 1.1fr 0.9fr;
+			align-items: center;
+			gap: 34px;
+			padding: 72px 0 42px;
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 14px;
+			border: 1px solid rgba(199, 255, 100, 0.18);
+			border-radius: 999px;
+			color: var(--accent);
+			background: rgba(199, 255, 100, 0.06);
+			font-size: 0.84rem;
+			margin-bottom: 20px;
+		}
+
+		.hero h1 {
+			margin: 0;
+			font-family: "Space Grotesk", sans-serif;
+			font-size: clamp(2.8rem, 6vw, 5.6rem);
+			line-height: 0.96;
+			letter-spacing: -0.05em;
+			max-width: 11ch;
+		}
+
+		.hero h1 span {
+			color: var(--primary);
+		}
+
+		.hero p {
+			margin: 22px 0 0;
+			color: var(--muted);
+			font-size: 1.1rem;
+			line-height: 1.75;
+			max-width: 60ch;
+		}
+
+		.hero-actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 14px;
+			margin-top: 30px;
+		}
+
+		.hero-stats {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 14px;
+			margin-top: 34px;
+		}
+
+		.stat {
+			padding: 18px;
+			border-radius: var(--radius-md);
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.stat strong {
+			display: block;
+			font-family: "Space Grotesk", sans-serif;
+			font-size: 1.55rem;
+			margin-bottom: 8px;
+		}
+
+		.hero-panel {
+			position: relative;
+			padding: 24px;
+			border-radius: var(--radius-xl);
+			background: linear-gradient(180deg, rgba(16, 34, 59, 0.92), rgba(8, 19, 34, 0.92));
+			box-shadow: var(--shadow);
+			border: 1px solid var(--card-border);
+			overflow: hidden;
+		}
+
+		.hero-panel::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(145deg, rgba(82, 224, 255, 0.12), transparent 40%, rgba(255, 138, 61, 0.1));
+			pointer-events: none;
+		}
+
+		.panel-grid {
+			position: relative;
+			display: grid;
+			gap: 16px;
+		}
+
+		.panel-card {
+			padding: 22px;
+			border-radius: 20px;
+			background: rgba(255, 255, 255, 0.04);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.panel-label {
+			color: var(--primary);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-size: 0.75rem;
+			font-weight: 800;
+		}
+
+		.panel-title {
+			margin: 12px 0 0;
+			font-size: 1.35rem;
+			font-weight: 800;
+		}
+
+		.panel-copy {
+			margin: 10px 0 0;
+			color: var(--muted);
+			line-height: 1.7;
+		}
+
+		.mini-stack {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+		}
+
+		.chip-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 18px;
+		}
+
+		.chip {
+			padding: 9px 12px;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.06);
+			color: #dceaf7;
+			font-size: 0.88rem;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.section {
+			padding: 42px 0;
+		}
+
+		.section-header {
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			gap: 20px;
+			margin-bottom: 24px;
+		}
+
+		.section-tag {
+			color: var(--secondary);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			font-size: 0.76rem;
+			font-weight: 800;
+			margin-bottom: 10px;
+		}
+
+		.section h2 {
+			margin: 0;
+			font-family: "Space Grotesk", sans-serif;
+			font-size: clamp(2rem, 4vw, 3.2rem);
+			letter-spacing: -0.04em;
+		}
+
+		.section-intro {
+			max-width: 58ch;
+			color: var(--muted);
+			line-height: 1.75;
+		}
+
+		.grid-3,
+		.grid-2,
+		.pricing-grid,
+		.testimonial-grid,
+		.faq-grid {
+			display: grid;
+			gap: 18px;
+		}
+
+		.grid-3,
+		.pricing-grid,
+		.testimonial-grid,
+		.faq-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.grid-2 {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.card {
+			position: relative;
+			padding: 26px;
+			border-radius: var(--radius-lg);
+			background: var(--surface);
+			border: 1px solid var(--card-border);
+			box-shadow: var(--shadow);
+			overflow: hidden;
+		}
+
+		.card::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(140deg, rgba(255, 255, 255, 0.04), transparent 60%);
+			pointer-events: none;
+		}
+
+		.card h3,
+		.card h4 {
+			position: relative;
+			margin: 14px 0 10px;
+			font-size: 1.25rem;
+		}
+
+		.card p,
+		.card li {
+			position: relative;
+			color: var(--muted);
+			line-height: 1.75;
+		}
+
+		.icon {
+			width: 52px;
+			height: 52px;
+			display: grid;
+			place-items: center;
+			border-radius: 16px;
+			background: linear-gradient(145deg, rgba(82, 224, 255, 0.16), rgba(255, 138, 61, 0.18));
+			color: var(--text);
+			font-family: "Space Grotesk", sans-serif;
+			font-weight: 700;
+		}
+
+		.check-list,
+		.pricing-list,
+		.timeline-list {
+			list-style: none;
+			padding: 0;
+			margin: 18px 0 0;
+		}
+
+		.check-list li,
+		.pricing-list li,
+		.timeline-list li {
+			padding-left: 24px;
+			position: relative;
+			margin-bottom: 12px;
+		}
+
+		.check-list li::before,
+		.pricing-list li::before,
+		.timeline-list li::before {
+			content: "+";
+			position: absolute;
+			left: 0;
+			top: 0;
+			color: var(--accent);
+			font-weight: 800;
+		}
+
+		.highlight-card {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+			align-items: stretch;
+			padding: 18px;
+			border-radius: 30px;
+			background: linear-gradient(145deg, rgba(82, 224, 255, 0.12), rgba(255, 138, 61, 0.14));
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: var(--shadow);
+		}
+
+		.highlight-main,
+		.highlight-side {
+			padding: 28px;
+			border-radius: 24px;
+			background: rgba(5, 15, 27, 0.78);
+			border: 1px solid rgba(255, 255, 255, 0.06);
+		}
+
+		.pricing-card.featured {
+			transform: translateY(-10px);
+			border-color: rgba(82, 224, 255, 0.28);
+		}
+
+		.price {
+			display: flex;
+			align-items: baseline;
+			gap: 8px;
+			margin: 18px 0 4px;
+			font-family: "Space Grotesk", sans-serif;
+		}
+
+		.price strong {
+			font-size: 2.5rem;
+			line-height: 1;
+		}
+
+		.badge {
+			display: inline-flex;
+			padding: 8px 12px;
+			border-radius: 999px;
+			background: rgba(82, 224, 255, 0.1);
+			border: 1px solid rgba(82, 224, 255, 0.24);
+			color: var(--primary);
+			font-size: 0.8rem;
+			font-weight: 800;
+		}
+
+		.testimonial-name {
+			margin-top: 18px;
+			font-weight: 800;
+		}
+
+		.testimonial-role {
+			color: var(--muted);
+			font-size: 0.94rem;
+		}
+
+		.contact-card {
+			display: grid;
+			grid-template-columns: 1.05fr 0.95fr;
+			gap: 18px;
+			align-items: stretch;
+		}
+
+		.contact-box {
+			padding: 30px;
+			border-radius: 24px;
+			background: rgba(6, 14, 25, 0.76);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.contact-box form {
+			display: grid;
+			gap: 12px;
+		}
+
+		.contact-box input,
+		.contact-box textarea {
+			width: 100%;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 16px;
+			padding: 15px 16px;
+			background: rgba(255, 255, 255, 0.04);
+			color: var(--text);
+			font: inherit;
+		}
+
+		.contact-box input::placeholder,
+		.contact-box textarea::placeholder {
+			color: #7f92a9;
+		}
+
+		.contact-box textarea {
+			min-height: 138px;
+			resize: vertical;
+		}
+
+		.contact-points {
+			display: grid;
+			gap: 14px;
+			margin-top: 18px;
+		}
+
+		.contact-point {
+			padding: 16px 18px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.footer {
+			width: min(calc(100% - 32px), var(--max-width));
+			margin: 0 auto;
+			padding: 28px 0 42px;
+			display: flex;
+			justify-content: space-between;
+			gap: 14px;
+			color: var(--muted);
+			font-size: 0.95rem;
+		}
+
+		.reveal {
+			opacity: 0;
+			transform: translateY(22px);
+			animation: rise 0.8s ease forwards;
+		}
+
+		.delay-1 { animation-delay: 0.1s; }
+		.delay-2 { animation-delay: 0.2s; }
+		.delay-3 { animation-delay: 0.3s; }
+		.delay-4 { animation-delay: 0.4s; }
+
+		@keyframes rise {
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@media (max-width: 980px) {
+			.hero,
+			.highlight-card,
+			.contact-card,
+			.grid-2,
+			.grid-3,
+			.pricing-grid,
+			.testimonial-grid,
+			.faq-grid,
+			.mini-stack {
+				grid-template-columns: 1fr;
+			}
+
+			.topbar-inner {
+				flex-wrap: wrap;
+			}
+
+			.nav {
+				width: 100%;
+				justify-content: space-between;
+				overflow-x: auto;
+				padding-bottom: 4px;
+			}
+
+			.hero {
+				padding-top: 48px;
+			}
+
+			.hero-stats {
+				grid-template-columns: 1fr;
+			}
+
+			.pricing-card.featured {
+				transform: none;
+			}
+
+			.footer {
+				flex-direction: column;
+			}
+		}
+
+		@media (max-width: 640px) {
+			.topbar-inner,
+			.section,
+			.hero,
+			.footer {
+				width: min(calc(100% - 24px), var(--max-width));
+			}
+
+			.button,
+			.button-secondary {
+				width: 100%;
+			}
+
+			.hero h1 {
+				max-width: 100%;
+			}
+
+			.contact-box,
+			.card,
+			.hero-panel,
+			.highlight-main,
+			.highlight-side {
+				padding: 22px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="page-shell">
+		<header class="topbar">
+			<div class="topbar-inner">
+				<a href="#inicio" class="brand" aria-label="Inicio demiweb">
+					<span class="brand-mark">d</span>
+					<span>demiweb</span>
+				</a>
+				<nav class="nav" aria-label="Navegacion principal">
+					<a href="#servicios">Servicios</a>
+					<a href="#microapps">Microapps</a>
+					<a href="#proceso">Proceso</a>
+					<a href="#planes">Planes</a>
+					<a href="#opiniones">Opiniones</a>
+					<a href="#contacto">Contacto</a>
+				</nav>
+				<a href="#contacto" class="button-secondary">Pedir propuesta</a>
+			</div>
+		</header>
+
+		<main>
+			<section class="hero" id="inicio">
+				<div>
+					<div class="eyebrow reveal">Hosting veloz + desarrollo a medida + WordPress</div>
+					<h1 class="reveal delay-1">Tu web tiene que <span>vender</span>, cargar rapido y verse impecable.</h1>
+					<p class="reveal delay-2">
+						En demiweb creamos sitios modernos para marcas, emprendedores y negocios que necesitan presencia online seria,
+						clara y lista para convertir visitas en consultas. Te acompano desde el hosting hasta el lanzamiento final.
+					</p>
+					<div class="hero-actions reveal delay-3">
+						<a href="#contacto" class="button">Quiero mi sitio</a>
+						<a href="#planes" class="button-secondary">Ver soluciones</a>
+					</div>
+					<div class="hero-stats reveal delay-4">
+						<div class="stat">
+							<strong>HTML</strong>
+							<span>Landings rapidas, livianas y hechas a medida.</span>
+						</div>
+						<div class="stat">
+							<strong>WordPress</strong>
+							<span>Panel autogestionable para escalar contenido.</span>
+						</div>
+						<div class="stat">
+							<strong>Hosting</strong>
+							<span>Base tecnica confiable para que tu web no falle.</span>
+						</div>
+					</div>
+				</div>
+
+				<aside class="hero-panel reveal delay-2" aria-label="Resumen de servicios">
+					<div class="panel-grid">
+						<div class="panel-card">
+							<div class="panel-label">Solucion integral</div>
+							<h2 class="panel-title">Una sola persona, todo resuelto.</h2>
+							<p class="panel-copy">
+								Estructura, diseno, contenido inicial, hosting, optimizacion, adaptacion a celular y soporte.
+							</p>
+							<div class="chip-row">
+								<span class="chip">Sitios institucionales</span>
+								<span class="chip">Landing pages</span>
+								<span class="chip">WordPress</span>
+								<span class="chip">Mantenimiento</span>
+							</div>
+						</div>
+						<div class="mini-stack">
+							<div class="panel-card">
+								<div class="panel-label">Ideal para</div>
+								<p class="panel-copy">Negocios que quieren verse mejor, ordenar su oferta y captar mas consultas.</p>
+							</div>
+							<div class="panel-card">
+								<div class="panel-label">Enfoque</div>
+								<p class="panel-copy">Velocidad, claridad comercial y una estetica moderna que genere confianza.</p>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</section>
+
+			<section class="section" id="servicios">
+				<div class="section-header">
+					<div>
+						<div class="section-tag">Servicios</div>
+						<h2>Todo lo que necesitas para lanzar una web profesional</h2>
+					</div>
+					<p class="section-intro">
+						Podes contratar una solucion puntual o delegar todo el frente digital: infraestructura, diseno, desarrollo y mejora continua.
+					</p>
+				</div>
+
+				<div class="grid-3">
+					<article class="card reveal">
+						<div class="icon">01</div>
+						<h3>Hosting y puesta online</h3>
+						<p>
+							Te ayudo a elegir y configurar un entorno estable para que tu sitio cargue rapido, funcione bien y tenga una base tecnica prolija.
+						</p>
+						<ul class="check-list">
+							<li>Dominio y hosting</li>
+							<li>SSL y seguridad basica</li>
+							<li>Correos y configuracion inicial</li>
+						</ul>
+					</article>
+
+					<article class="card reveal delay-1">
+						<div class="icon">02</div>
+						<h3>Desarrollo web en HTML</h3>
+						<p>
+							Sitios livianos, personalizados y con foco en impacto visual, rendimiento y claridad del mensaje comercial.
+						</p>
+						<ul class="check-list">
+							<li>Landing pages</li>
+							<li>Webs institucionales</li>
+							<li>One page y multipagina</li>
+						</ul>
+					</article>
+
+					<article class="card reveal delay-2">
+						<div class="icon">03</div>
+						<h3>Webs en WordPress</h3>
+						<p>
+							Si queres autogestionar contenido, armamos una solucion con WordPress cuidando estructura, performance y orden visual.
+						</p>
+						<ul class="check-list">
+							<li>Panel editable</li>
+							<li>Blog y secciones dinamicas</li>
+							<li>Soporte y mantenimiento</li>
+						</ul>
+					</article>
+				</div>
+			</section>
+
+			<section class="section">
+				<div class="highlight-card reveal">
+					<div class="highlight-main">
+						<div class="section-tag">Diferencial</div>
+						<h2>Menos vueltas. Mas claridad. Mejor presencia digital.</h2>
+						<p class="section-intro">
+							No se trata solo de tener una web linda. Se trata de mostrar bien tu propuesta, ordenar la informacion, transmitir confianza y facilitar el contacto.
+						</p>
+						<ul class="timeline-list">
+							<li>Contenido pensado para que se entienda rapido que ofreces.</li>
+							<li>Diseño responsive para que se vea fuerte tambien en celular.</li>
+							<li>Estetica actual, limpia y orientada a conversion.</li>
+						</ul>
+					</div>
+					<div class="highlight-side">
+						<div class="section-tag">Ideal para</div>
+						<h3>Emprendedores, profesionales y negocios que quieren dar un salto</h3>
+						<p>
+							Si hoy dependes solo de redes sociales o tenes una web que no representa tu nivel, esta propuesta esta pensada para vos.
+						</p>
+						<div class="chip-row">
+							<span class="chip">Servicios profesionales</span>
+							<span class="chip">Marcas personales</span>
+							<span class="chip">Tiendas y negocios</span>
+							<span class="chip">Empresas chicas</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section" id="proceso">
+				<div class="section-header">
+					<div>
+						<div class="section-tag">Proceso</div>
+						<h2>Una forma de trabajo simple y ordenada</h2>
+					</div>
+					<p class="section-intro">
+						Trabajo con un proceso claro para evitar demoras, idas y vueltas innecesarias y resultados improvisados.
+					</p>
+				</div>
+
+				<div class="grid-2">
+					<article class="card reveal">
+						<div class="icon">A</div>
+						<h3>Diagnostico y propuesta</h3>
+						<p>
+							Revisamos tu objetivo, el publico al que apuntas y el tipo de web que mejor encaja con tu negocio.
+						</p>
+					</article>
+					<article class="card reveal delay-1">
+						<div class="icon">B</div>
+						<h3>Diseño y estructura</h3>
+						<p>
+							Defino el recorrido de la pagina, el estilo visual y el contenido inicial para que todo tenga logica comercial.
+						</p>
+					</article>
+					<article class="card reveal delay-2">
+						<div class="icon">C</div>
+						<h3>Desarrollo y ajustes</h3>
+						<p>
+							Construyo el sitio, lo adapto a mobile, optimizo rendimiento y hago las correcciones finales antes de publicar.
+						</p>
+					</article>
+					<article class="card reveal delay-3">
+						<div class="icon">D</div>
+						<h3>Lanzamiento y soporte</h3>
+						<p>
+							Dejamos el sitio online, conectado a tus canales de contacto y listo para empezar a recibir consultas.
+						</p>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="microapps">
+				<div class="section-header">
+					<div>
+						<div class="section-tag">Microapps</div>
+						<h2>Apps simples para resolver un problema concreto</h2>
+					</div>
+					<p class="section-intro">
+						No siempre necesitas un sistema grande. A veces una herramienta acotada, bien hecha y enfocada en una sola tarea vale mas que cualquier plataforma compleja.
+					</p>
+				</div>
+
+				<div class="microapp-grid">
+					<article class="microapp-card reveal">
+						<span class="microapp-icon">📅</span>
+						<h3>Turnos online</h3>
+						<p>Tus clientes reservan su horario solos, sin llamarte, sin mensajes de va y viene. Podas configurar dias, horarios y cantidad de turnos disponibles.</p>
+						<span class="microapp-flag">Muy solicitado</span>
+					</article>
+
+					<article class="microapp-card reveal delay-1">
+						<span class="microapp-icon">💬</span>
+						<h3>Formulario de consultas inteligente</h3>
+						<p>Un formulario que filtra, organiza y te manda las consultas listas para responder. Se conecta a mail, WhatsApp o una hoja de calculo.</p>
+						<span class="microapp-flag">Facil de integrar</span>
+					</article>
+
+					<article class="microapp-card reveal delay-2">
+						<span class="microapp-icon">💰</span>
+						<h3>Cotizador o pedido de presupuesto</h3>
+						<p>El cliente completa sus necesidades y recibe un presupuesto estimado al instante, o vos recibis la consulta con toda la info necesaria para responder rapido.</p>
+						<span class="microapp-flag">Ahorra tiempo</span>
+					</article>
+
+					<article class="microapp-card reveal">
+						<span class="microapp-icon">🛍️</span>
+						<h3>Catalogo con consulta por WhatsApp</h3>
+						<p>Mostra tus productos o servicios con foto, descripcion y precio. El cliente hace click y te escribe directamente por WhatsApp sin salir de la web.</p>
+						<span class="microapp-flag">Sin carrito complejo</span>
+					</article>
+
+					<article class="microapp-card reveal delay-1">
+						<span class="microapp-icon">📋</span>
+						<h3>Panel de leads y consultas</h3>
+						<p>Una vista simple donde ves todas las consultas que llegan, su estado y datos de contacto. Sin CRM costoso, sin complicaciones. Solo lo que necesitas.</p>
+						<span class="microapp-flag">Para organizar ventas</span>
+					</article>
+
+					<article class="microapp-card reveal delay-2">
+						<span class="microapp-icon">🔄</span>
+						<h3>Estado del pedido o servicio</h3>
+						<p>El cliente ingresa un codigo y ve en que etapa esta su pedido, trabajo o servicio. Tres estados simples: recibido, en proceso, listo. Sin llamadas de seguimiento.</p>
+						<span class="microapp-flag">Ideal para talleres y estudios</span>
+					</article>
+				</div>
+
+				<div class="microapp-note reveal">
+					<p>
+						<strong>¿Como armamos la base de datos?</strong><br>
+						Cada solucion usa su propio entorno, separado y a nombre del cliente. No mezclamos datos entre proyectos. Cuando el trabajo termina, el cliente se queda con todo: plataforma, datos y acceso completo.
+					</p>
+					<a href="#contacto" class="button">Contame tu caso</a>
+				</div>
+			</section>
+
+			<section class="section" id="planes">
+				<div class="section-header">
+					<div>
+						<div class="section-tag">Planes base</div>
+						<h2>Soluciones para distintos momentos de tu negocio</h2>
+					</div>
+					<p class="section-intro">
+						Estos planes sirven como referencia inicial. Luego podemos ajustarlos segun alcance, tiempos y necesidades reales.
+					</p>
+				</div>
+
+				<div class="pricing-grid">
+					<article class="card pricing-card reveal">
+						<span class="badge">Base</span>
+						<h3>Landing express</h3>
+						<div class="price">
+							<strong>1 pagina</strong>
+							<span>para captar consultas</span>
+						</div>
+						<p>Ideal para lanzar una propuesta clara y profesional en poco tiempo.</p>
+						<ul class="pricing-list">
+							<li>Diseño one page</li>
+							<li>Contenido inicial cargado</li>
+							<li>Responsive</li>
+							<li>CTA a WhatsApp o formulario</li>
+						</ul>
+					</article>
+
+					<article class="card pricing-card featured reveal delay-1">
+						<span class="badge">Recomendado</span>
+						<h3>Web profesional</h3>
+						<div class="price">
+							<strong>Multipagina</strong>
+							<span>para mostrar mejor tu negocio</span>
+						</div>
+						<p>La opcion ideal si queres una presencia online mas completa, solida y preparada para crecer.</p>
+						<ul class="pricing-list">
+							<li>Inicio, servicios, contacto y mas</li>
+							<li>Diseño personalizado</li>
+							<li>Hosting y publicacion</li>
+							<li>Soporte de salida</li>
+						</ul>
+					</article>
+
+					<article class="card pricing-card reveal delay-2">
+						<span class="badge">Escalable</span>
+						<h3>WordPress administrable</h3>
+						<div class="price">
+							<strong>Panel editable</strong>
+							<span>para autogestion</span>
+						</div>
+						<p>Pensado para negocios que necesitan publicar novedades, sumar paginas o manejar su contenido.</p>
+						<ul class="pricing-list">
+							<li>WordPress configurado</li>
+							<li>Secciones dinamicas</li>
+							<li>Capacitacion inicial</li>
+							<li>Mantenimiento opcional</li>
+						</ul>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="opiniones">
+				<div class="section-header">
+					<div>
+						<div class="section-tag">Opiniones</div>
+						<h2>Texto de ejemplo para transmitir confianza desde el dia uno</h2>
+					</div>
+					<p class="section-intro">
+						Dejo testimonios de muestra para esta primera version. Despues los reemplazamos por casos y clientes reales.
+					</p>
+				</div>
+
+				<div class="testimonial-grid">
+					<article class="card reveal">
+						<p>
+							"Necesitabamos una web simple pero con impacto. demiweb ordeno toda la propuesta y en pocos dias ya estabamos mostrando algo mucho mas profesional."
+						</p>
+						<div class="testimonial-name">Marina G.</div>
+						<div class="testimonial-role">Estudio de interiorismo</div>
+					</article>
+					<article class="card reveal delay-1">
+						<p>
+							"Lo mejor fue resolver hosting, diseño y desarrollo en un mismo lugar. El proceso fue claro y la web quedo muy alineada con nuestra marca."
+						</p>
+						<div class="testimonial-name">Leo R.</div>
+						<div class="testimonial-role">Marca personal y consultoria</div>
+					</article>
+					<article class="card reveal delay-2">
+						<p>
+							"Teniamos una pagina vieja que no transmitia nada. La nueva version se ve actual, carga mejor y ahora si invita a escribirnos."
+						</p>
+						<div class="testimonial-name">Paula S.</div>
+						<div class="testimonial-role">Negocio local de servicios</div>
+					</article>
+				</div>
+			</section>
+
+			<section class="section">
+				<div class="section-header">
+					<div>
+						<div class="section-tag">Preguntas frecuentes</div>
+						<h2>Respuestas rapidas para objeciones comunes</h2>
+					</div>
+				</div>
+
+				<div class="faq-grid">
+					<article class="card reveal">
+						<h3>¿Conviene HTML o WordPress?</h3>
+						<p>
+							Depende del tipo de proyecto. Si queres maxima velocidad y una estructura cerrada, HTML suele ser ideal. Si queres editar contenido seguido, WordPress puede ser mejor.
+						</p>
+					</article>
+					<article class="card reveal delay-1">
+						<h3>¿Incluis el hosting?</h3>
+						<p>
+							Puedo ocuparme de la recomendacion, configuracion y puesta online. La idea es que no tengas que resolver la parte tecnica por tu cuenta.
+						</p>
+					</article>
+					<article class="card reveal delay-2">
+						<h3>¿Se puede escalar despues?</h3>
+						<p>
+							Si. Podemos empezar con una landing y luego sumar secciones, blog, formularios mas completos o una migracion a una solucion mas grande.
+						</p>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="contacto">
+				<div class="contact-card reveal">
+					<div class="contact-box">
+						<div class="section-tag">Contacto</div>
+						<h2>Contame que necesitas y armamos la mejor version para tu web</h2>
+						<p class="section-intro">
+							Este formulario queda como base visual. Luego lo conectamos al canal que prefieras: mail, WhatsApp o un servicio de formularios.
+						</p>
+						<form>
+							<input type="text" name="nombre" placeholder="Tu nombre o marca">
+							<input type="email" name="email" placeholder="Tu email">
+							<textarea name="mensaje" placeholder="Contame que tipo de web queres, si ya tenes dominio, plazos y cualquier referencia util"></textarea>
+							<button type="button" class="button">Quiero recibir una propuesta</button>
+						</form>
+					</div>
+
+					<aside class="contact-box">
+						<div class="section-tag">Trabajemos juntos</div>
+						<h3>Una presencia digital mejor empieza con una conversacion clara</h3>
+						<p>
+							Si queres una web moderna, con criterio visual y enfoque comercial, esta primera version ya deja esa intencion bien marcada.
+						</p>
+						<div class="contact-points">
+							<div class="contact-point">
+								<strong>Respuesta inicial</strong>
+								<p>Podemos definir alcance, tiempos y mejor formato segun tu proyecto.</p>
+							</div>
+							<div class="contact-point">
+								<strong>Entrega enfocada</strong>
+								<p>La idea es publicar una web que no solo se vea bien, sino que tambien ayude a vender mejor.</p>
+							</div>
+							<div class="contact-point">
+								<strong>Base lista para crecer</strong>
+								<p>Despues ajustamos textos, colores, secciones, casos reales y el canal de contacto final.</p>
+							</div>
+						</div>
+					</aside>
+				</div>
+			</section>
+		</main>
+
+		<footer class="footer">
+			<span>demiweb | Hosting, desarrollo web y WordPress</span>
+			<span>Primera version visual lista para iterar</span>
+		</footer>
+	</div>
+</body>
+</html>
