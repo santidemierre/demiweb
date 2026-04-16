@@ -149,6 +149,32 @@
 			font-size: 0.95rem;
 		}
 
+		.menu-toggle {
+			display: none;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: 5px;
+			width: 46px;
+			height: 46px;
+			border-radius: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.14);
+			background: rgba(255, 255, 255, 0.04);
+			cursor: pointer;
+		}
+
+		.menu-toggle-bar {
+			width: 20px;
+			height: 2px;
+			border-radius: 999px;
+			background: var(--text);
+			transition: transform 0.24s ease, opacity 0.24s ease;
+		}
+
+		.topbar-cta {
+			display: inline-flex;
+		}
+
 		.nav a {
 			transition: color 0.25s ease;
 		}
@@ -702,14 +728,12 @@
 		}
 
 		.form-status.success {
-			display: flex;
 			background: rgba(82, 224, 255, 0.08);
 			border: 1px solid rgba(82, 224, 255, 0.24);
 			color: var(--primary);
 		}
 
 		.form-status.error {
-			display: flex;
 			background: rgba(255, 100, 100, 0.08);
 			border: 1px solid rgba(255, 100, 100, 0.24);
 			color: #ff9090;
@@ -850,14 +874,59 @@
 			}
 
 			.topbar-inner {
-				flex-wrap: wrap;
+				position: relative;
+				flex-wrap: nowrap;
 			}
 
 			.nav {
-				width: 100%;
-				justify-content: space-between;
-				overflow-x: auto;
-				padding-bottom: 4px;
+				display: none;
+				position: absolute;
+				top: calc(100% + 12px);
+				left: 0;
+				right: 0;
+				padding: 14px;
+				gap: 10px;
+				border-radius: 18px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				background: rgba(5, 14, 25, 0.96);
+				box-shadow: var(--shadow);
+				backdrop-filter: blur(18px);
+				z-index: 11;
+			}
+
+			.topbar.is-open .nav {
+				display: grid;
+				grid-template-columns: 1fr;
+			}
+
+			.nav a {
+				padding: 10px 12px;
+				border-radius: 10px;
+				background: rgba(255, 255, 255, 0.02);
+			}
+
+			.menu-toggle {
+				display: inline-flex;
+			}
+
+			.topbar.is-open .menu-toggle-bar:nth-child(1) {
+				transform: translateY(7px) rotate(45deg);
+			}
+
+			.topbar.is-open .menu-toggle-bar:nth-child(2) {
+				opacity: 0;
+			}
+
+			.topbar.is-open .menu-toggle-bar:nth-child(3) {
+				transform: translateY(-7px) rotate(-45deg);
+			}
+
+			.topbar-cta {
+				display: none;
+			}
+
+			.microapp-grid {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
 			}
 
 			.hero {
@@ -890,6 +959,11 @@
 				width: min(calc(100% - 24px), var(--max-width));
 			}
 
+			.microapp-grid {
+				grid-template-columns: 1fr;
+				gap: 14px;
+			}
+
 			.button,
 			.button-secondary {
 				width: 100%;
@@ -919,7 +993,12 @@
 					<span class="brand-mark">d</span>
 					<span>demiweb</span>
 				</a>
-				<nav class="nav" aria-label="Navegacion principal">
+				<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-controls="main-nav" aria-expanded="false">
+					<span class="menu-toggle-bar"></span>
+					<span class="menu-toggle-bar"></span>
+					<span class="menu-toggle-bar"></span>
+				</button>
+				<nav class="nav" id="main-nav" aria-label="Navegacion principal">
 					<a href="#servicios">Servicios</a>
 					<a href="#microapps">Microapps</a>
 					<a href="#proceso">Proceso</a>
@@ -927,7 +1006,7 @@
 					<a href="#opiniones">Opiniones</a>
 					<a href="#contacto">Contacto</a>
 				</nav>
-				<a href="#contacto" class="button-secondary">Pedir propuesta</a>
+				<a href="#contacto" class="button-secondary topbar-cta">Pedir propuesta</a>
 			</div>
 		</header>
 
@@ -1365,6 +1444,33 @@
 	<script>
 		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 		document.body.classList.add("is-ready");
+
+		const topbar = document.querySelector(".topbar");
+		const menuToggle = document.querySelector(".menu-toggle");
+		const nav = document.getElementById("main-nav");
+		if (topbar && menuToggle && nav) {
+			const closeMenu = () => {
+				topbar.classList.remove("is-open");
+				menuToggle.setAttribute("aria-expanded", "false");
+				menuToggle.setAttribute("aria-label", "Abrir menu");
+			};
+
+			menuToggle.addEventListener("click", () => {
+				const isOpen = topbar.classList.toggle("is-open");
+				menuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+				menuToggle.setAttribute("aria-label", isOpen ? "Cerrar menu" : "Abrir menu");
+			});
+
+			nav.querySelectorAll("a").forEach((link) => {
+				link.addEventListener("click", closeMenu);
+			});
+
+			window.addEventListener("resize", () => {
+				if (window.innerWidth > 980) {
+					closeMenu();
+				}
+			});
+		}
 
 		const revealElements = document.querySelectorAll(".reveal");
 		if (prefersReducedMotion.matches) {
